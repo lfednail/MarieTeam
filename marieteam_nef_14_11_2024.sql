@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 14 nov. 2024 à 09:45
+-- Généré le : jeu. 14 nov. 2024 à 11:41
 -- Version du serveur : 10.4.24-MariaDB
 -- Version de PHP : 7.4.29
 
@@ -196,7 +196,6 @@ CREATE TABLE `fret` (
 
 INSERT INTO `fret` (`id_Bateaufret`, `id_Bateau`, `Fret`) VALUES
 (1, 1, 1),
-(2, 2, 0),
 (3, 3, 1);
 
 -- --------------------------------------------------------
@@ -239,9 +238,9 @@ CREATE TABLE `liaison` (
 --
 
 INSERT INTO `liaison` (`id_Liaison`, `Lieu_depart`, `Lieu_arrivee`, `Distance_liaison`) VALUES
-(1, 'Paris', 'Londres', 350),
-(2, 'Marseille', 'Barcelone', 300),
-(3, 'Nice', 'Gênes', 180);
+(1, 'Cherbourg-en-Cotentin', 'Poole', 139),
+(2, 'Marseille', 'Porto Torres', 413),
+(3, 'Nice', 'Bastia', 247);
 
 -- --------------------------------------------------------
 
@@ -260,8 +259,9 @@ CREATE TABLE `periode` (
 --
 
 INSERT INTO `periode` (`id_Periode`, `Debut_periode`, `Fin_periode`) VALUES
-(1, '2024-12-01', '2024-12-31'),
-(2, '2025-01-01', '2025-01-31');
+(1, '2024-09-01', '2025-06-15'),
+(2, '2025-06-16', '2025-09-15'),
+(3, '2025-09-16', '2026-06-30');
 
 -- --------------------------------------------------------
 
@@ -301,6 +301,17 @@ CREATE TABLE `reservationtarif` (
   `Lettre_identification` char(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `reservationtarif`
+--
+
+INSERT INTO `reservationtarif` (`id_Reservation`, `id_TypeTarif`, `Quantite_tarif`, `id_Periode`, `id_Liaison`, `Lettre_identification`) VALUES
+(1, 2, 1, 2, 1, 'C'),
+(2, 2, 3, 1, 1, 'A'),
+(3, 2, 4, 2, 2, 'A'),
+(4, 2, 4, 3, 3, 'B'),
+(5, 2, 7, 3, 3, 'B');
+
 -- --------------------------------------------------------
 
 --
@@ -314,6 +325,18 @@ CREATE TABLE `tarifliaison` (
   `id_Periode` int(11) NOT NULL,
   `Tarif` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `tarifliaison`
+--
+
+INSERT INTO `tarifliaison` (`id_Liaison`, `id_TypeTarif`, `Lettre_identification`, `id_Periode`, `Tarif`) VALUES
+(1, 1, 'B', 2, 142),
+(1, 1, 'C', 2, 284),
+(1, 2, 'A', 1, 15),
+(2, 1, 'B', 1, 100),
+(2, 2, 'A', 2, 17),
+(3, 2, 'B', 3, 197);
 
 -- --------------------------------------------------------
 
@@ -443,7 +466,8 @@ INSERT INTO `utilisateur` (`id_Utilisateur`, `Nom_utilisateur`, `Prenom_utilisat
 (56, 'Legros', 'Henri', 'henri.legros@example.com', '$2y$10$624898dff13528cac6b6bdaf92a88f6cfd7763f9d8587e940823d', 'client'),
 (57, 'Gauthier', 'Sarah', 'sarah.gauthier@example.com', '$2y$10$0755cb3e1e6c54d9d2f91b9096051a7f5cf8621cb474c75a3a2be', 'client'),
 (58, 'Michaud', 'André', 'andre.michaud@example.com', '$2y$10$222950f830142fbf4397f7bb295cf0b4f5532b158bc8dd6cc34c0', 'client'),
-(59, 'Leclercq', 'Lucie', 'lucie.leclercq@example.com', '$2y$10$48046fbb3e8f6abd06a2e154235ee59deeecb6b99a828b5fa0add', 'client');
+(59, 'Leclercq', 'Lucie', 'lucie.leclercq@example.com', '$2y$10$48046fbb3e8f6abd06a2e154235ee59deeecb6b99a828b5fa0add', 'client'),
+(60, 'Client', 'test', 'client.tets@test.st', '$2y$10$3e5bbd7bcdbcc13153b735a042dcb5a9fe7807acbcb2b6f0c50f4', 'Client');
 
 -- --------------------------------------------------------
 
@@ -456,6 +480,13 @@ CREATE TABLE `voyageur` (
   `id_Bateau` int(11) NOT NULL,
   `Voyageur` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `voyageur`
+--
+
+INSERT INTO `voyageur` (`id_BateauVoyageur`, `id_Bateau`, `Voyageur`) VALUES
+(2, 2, 1);
 
 --
 -- Index pour les tables déchargées
@@ -648,7 +679,7 @@ ALTER TABLE `liaison`
 -- AUTO_INCREMENT pour la table `periode`
 --
 ALTER TABLE `periode`
-  MODIFY `id_Periode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_Periode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `reservation`
@@ -660,13 +691,13 @@ ALTER TABLE `reservation`
 -- AUTO_INCREMENT pour la table `reservationtarif`
 --
 ALTER TABLE `reservationtarif`
-  MODIFY `id_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_Reservation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `tarifliaison`
 --
 ALTER TABLE `tarifliaison`
-  MODIFY `id_Liaison` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_Liaison` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `traversee`
@@ -678,13 +709,13 @@ ALTER TABLE `traversee`
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id_Utilisateur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id_Utilisateur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT pour la table `voyageur`
 --
 ALTER TABLE `voyageur`
-  MODIFY `id_BateauVoyageur` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_BateauVoyageur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
